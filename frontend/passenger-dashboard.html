@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Dashboard</title>
+    <link rel="stylesheet" href="passenger-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/i18next/i18next.min.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-logo"><img src="your-logo.png" alt="App Logo"></div>
+            <div class="profile-header">
+                <i class="fas fa-user-circle generic-icon"></i>
+                <h2 data-i18n="passenger">Passenger</h2>
+                <p data-i18n="welcome">Welcome</p>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-home"></i> <span data-i18n="home">Home</span></a></li>
+                    <li><a href="#"><i class="fas fa-calendar-alt"></i> <span data-i18n="booking">Booking</span></a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i> <span data-i18n="profile">Profile</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="mobile-header">
+                <h1 data-i18n="find_bus">Find Bus</h1>
+            </header>
+
+            <div class="search-card">
+                <form id="main-search-form">
+                    <div class="input-container">
+                        <div class="input-wrapper">
+                            <label for="from-stand-input" data-i18n="from_stand">From Stand</label>
+                            <input type="text" id="from-stand-input" placeholder="Enter departure stand">
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="to-stand-input" data-i18n="to_stand">To Stand</label>
+                            <input type="text" id="to-stand-input" placeholder="Enter destination stand">
+                        </div>
+                    </div>
+                    <button type="submit" class="find-bus-btn" data-i18n="find_bus">Find Bus</button>
+                </form>
+            </div>
+
+            <section class="bus-list-section">
+                </section>
+        </main>
+    </div>
+
+    <script src="language-loader.js"></script>
+    <script src="passenger-dashboard.js"></script>
+</body>
+</html>

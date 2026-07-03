@@ -1,0 +1,114 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}/* Website ke main content ko shuru mein hide karein */
+#main-content {
+    opacity: 0; /* Isse content shuru mein dikhega nahi */
+    transition: opacity 0.6s ease-in; /* Jab content aayega to fade-in hoga */
+}
+/* Style for the splash screen container */
+.splash-screen {
+    position: fixed; /* Keep it on top of all other content */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff; /* A solid background color, e.g., white */
+    z-index: 9999; /* Ensures it's on the very top layer */
+
+    /* Center the logo using Flexbox */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* For the fade-out effect */
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+
+/* YEH DEFAULT SIZE HAI (PHONE KE LIYE) */
+/* Yeh hamesha kaam karega jab tak screen choti hai */
+.splash-screen img {
+    max-width: 150px; /* Phone par logo ka size */
+    height: auto;
+    transition: max-width 0.3s ease; /* Size badalne par halka sa animation */
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* MEDIA QUERY (DESKTOP KE LIYE) */
+/* Yeh code tabhi kaam karega jab screen ki chaudai (width) 768px se zyada hogi */
+@media (min-width: 768px) {
+    .splash-screen img {
+        max-width: 300px; /* Desktop par logo ka bada size */
+    }
+}
+
+/* Optional: A keyframe animation for the logo */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* A class to hide the splash screen */
+.splash-screen.hidden {
+    opacity: 0;
+    /* This makes sure the user can't interact with the hidden screen */
+    pointer-events: none; 
+}
+
+/* ================================================= */
+/* SPLASH SCREEN KE BAAD WALE PAGE KI STYLING       */
+/* ================================================= */
+
+/* Style to initially hide the main content */
+#main-content {
+    opacity: 0;
+    transition: opacity 0.6s ease-in;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Styles for the language selection box */
+.language-container {
+    text-align: center;
+    padding: 40px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+h1, h2, h3 { margin: 10px 0; }
+h1 { color: #333; }
+h2 { color: #F97B22; }
+h3 { color: #007BFF; }
+
+.options {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.language-btn {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: 600;
+    border: 2px solid #F97B22;
+    background-color: white;
+    color: #F97B22;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.language-btn:hover {
+    background-color: #F97B22;
+    color: white;
+}

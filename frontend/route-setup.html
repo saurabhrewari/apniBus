@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Setup</title>
+    <link rel="stylesheet" href="route-setup.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/i18next/i18next.min.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="your-logo.png" alt="App Logo">
+            </div>
+            <div class="profile-header">
+                <img src="profile-pic.jpg" alt="User Profile Picture">
+                <h2 class="user-name">Kishan Kumar</h2>
+                <p data-i18n="welcome">Welcome</p>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="active"><a href="driver-dashboard.html"><i class="fas fa-th-large"></i> <span data-i18n="dashboard">Dashboard</span></a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i> <span data-i18n="profile">Profile</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="mobile-header">
+                <a href="driver-dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+                <h1 data-i18n="route_setup">Route Setup</h1>
+            </header>
+
+            <form class="setup-form">
+                <div class="form-group">
+                    <label for="bus-number" data-i18n="bus_number">Bus Number</label>
+                    <input type="text" id="bus-number" data-i18n="enter_bus_number" placeholder="Enter Bus Number">
+                </div>
+
+                <div class="form-group">
+                    <label for="bus-route" data-i18n="bus_route">Bus Route Number</label>
+                    <input type="text" id="bus-route" data-i18n="enter_bus_route" placeholder="Enter Bus Route">
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="location">Location</label>
+                    <div class="location-toggle">
+                        <button type="button" class="toggle-btn active" data-i18n="enable">Enable</button>
+                        <button type="button" class="toggle-btn" data-i18n="disable">Disable</button>
+                    </div>
+                </div>
+            </form>
+            
+            <button class="start-journey-btn" data-i18n="start_journey">Start Journey</button>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="language-loader.js"></script>
+    <script src="route-setup.js"></script>
+</body>
+</html>

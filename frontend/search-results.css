@@ -1,0 +1,103 @@
+/* Import dashboard styles to reuse the sidebar layout */
+@import url('driver-dashboard.css');
+
+.results-container {
+    padding: 20px;
+}
+
+.mobile-header {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    padding: 0 0 20px 0;
+}
+
+.mobile-header h1 {
+    flex-grow: 1;
+    text-align: center;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.back-button {
+    font-size: 1.2em;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+#results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.result-card {
+    background-color: var(--white-color);
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.card-header {
+    background-color: #333;
+    color: var(--white-color);
+    padding: 10px 15px;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.timing-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.time-block {
+    text-align: center;
+}
+
+.time-block span {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.time-block label {
+    font-size: 0.8em;
+    color: #888;
+}
+
+.timeline {
+    color: #aaa;
+}
+
+.status-info {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.status-item {
+    text-align: center;
+}
+
+.status-item span {
+    font-weight: 600;
+}
+
+.status-item label {
+    font-size: 0.8em;
+    color: #888;
+}
+
+.status-running {
+    color: green;
+}
+
+.status-stopped {
+    color: red;
+}

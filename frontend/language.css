@@ -1,0 +1,43 @@
+/* ... (language.css ka poora code yahan paste karein jo maine pehle diya tha) ... */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #F5F5F5;
+}
+.language-container {
+    text-align: center;
+    padding: 40px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+h1, h2, h3 { margin: 10px 0; }
+h1 { color: #333; }
+h2 { color: #F97B22; }
+h3 { color: #007BFF; }
+.options {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.language-btn {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    font-weight: 600;
+    border: 2px solid #F97B22;
+    background-color: white;
+    color: #F97B22;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.language-btn:hover {
+    background-color: #F97B22;
+    color: white;
+}

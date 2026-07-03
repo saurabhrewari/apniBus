@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Status</title>
+    <link rel="stylesheet" href="live-status.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/i18next/i18next.min.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-logo"><img src="your-logo.png" alt="App Logo"></div>
+            <div class="profile-header">
+                <img src="profile-pic.jpg" alt="User Profile Picture">
+                <h2 class="user-name">Kishan Kumar</h2>
+                <p data-i18n="welcome">Welcome</p>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="active"><a href="driver-dashboard.html"><i class="fas fa-th-large"></i> <span data-i18n="dashboard">Dashboard</span></a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i> <span data-i18n="profile">Profile</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="mobile-header">
+                <a href="driver-dashboard.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+                <h1 data-i18n="live_status">Live Status</h1>
+            </header>
+
+            <div class="status-card">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label data-i18n="bus_number">Bus Number</label>
+                        <span id="bus-number-display">Loading...</span>
+                    </div>
+                    <div class="info-item">
+                        <label data-i18n="bus_route">Bus Route</label>
+                        <span id="bus-route-display">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="status-group">
+                    <label data-i18n="location">Location</label>
+                    <div class="location-radios">
+                        <label><input type="radio" name="location" checked> <span data-i18n="enable">Enable</span></label>
+                        <label><input type="radio" name="location"> <span data-i18n="disable">Disable</span></label>
+                    </div>
+                </div>
+
+                <div class="status-group">
+                    <label data-i18n="seats">Seats</label>
+                    <div class="seat-options">
+                        <button class="seat-btn" data-value="0" data-i18n="no_seat">No Seat</button>
+                        <button class="seat-btn" data-value="5">1-5</button>
+                        <button class="seat-btn" data-value="10">6-10</button>
+                        <button class="seat-btn" data-value="20">11-20</button>
+                        <button class="seat-btn active" data-value="21">20+</button>
+                    </div>
+                </div>
+
+                <button class="end-journey-btn" data-i18n="end_journey">End Journey</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script src="language-loader.js"></script>
+    <script src="live-status.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        if (navigator.geolocation) {
+            console.log("Watching driver location...");
+            navigator.geolocation.watchPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    // Send the driver's location to the server
+                    socket.emit("send-location", { latitude, longitude });
+                    console.log(`Location sent: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+                },
+                (error) => {
+                    console.error("Geolocation error:", error);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0,
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    </script>
+</body>
+</html>

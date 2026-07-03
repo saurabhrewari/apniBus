@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Role</title>
+    <link rel="stylesheet" href="role-selection.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/i18next/i18next.min.js"></script>
+</head>
+<body>
+    <div class="role-page-container">
+        <div class="top-section">
+            <img src="selection-background.png" alt="World Map" class="world-map">
+            <header class="role-header">
+                <img src="your-logo.png" alt="App Logo" class="app-logo">
+            </header>
+            <div class="text-content">
+                <h1 data-i18n="are_you">Are you</h1>
+                <p data-i18n="please_select_one">Please select any one to continue</p>
+            </div>
+        </div>
+
+        <div class="bottom-selection-section">
+            <div class="options-group">
+                <button class="role-option" onclick="selectRole('driver')">
+                    <i class="fas fa-user-tie"></i>
+                    <span data-i18n="driver">Driver</span>
+                </button>
+                <button class="role-option" onclick="selectRole('passenger')">
+                    <i class="fas fa-user-friends"></i>
+                    <span data-i18n="passenger">Passenger</span>
+                </button>
+            </div>
+            <button class="next-btn" onclick="goToNextPage()" data-i18n="next_button">Next</button>
+        </div>
+    </div>
+
+    <script src="language-loader.js"></script>
+    <script>
+        let selectedRole = ''; // To store the selected role
+
+        function selectRole(role) {
+            selectedRole = role;
+            // Visual feedback for selection
+            document.querySelectorAll('.role-option').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            console.log("Selected Role:", selectedRole);
+        }
+
+        function goToNextPage() {
+            if (selectedRole === 'driver') {
+                window.location.href = 'login.html';
+            } else if (selectedRole === 'passenger') {
+                // YAHAN BADLAV KIYA GAYA HAI
+                window.location.href = 'passenger-dashboard.html';
+            } else {
+                alert('Please select a role to continue.');
+            }
+        }
+    </script>
+</body>
+</html>

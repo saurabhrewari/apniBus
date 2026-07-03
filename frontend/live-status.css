@@ -1,0 +1,114 @@
+/* Import all the styles from the driver dashboard to reuse the layout */
+@import url('driver-dashboard.css');
+
+/* New styles specific to the status page */
+.status-card {
+    background-color: var(--primary-orange);
+    color: var(--white-color);
+    padding: 25px;
+    border-radius: 20px;
+    margin-top: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.info-item {
+    background-color: var(--white-color); /* This makes the box white */
+    color: var(--text-dark);              /* This makes the default text dark */
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.info-item label {
+    display: block;
+    font-size: 0.8em;
+    font-weight: 500;
+    color: var(--primary-orange);
+}
+
+.info-item span {
+    font-size: 1em;
+    font-weight: 600;
+    color: #333 !important; /* This forces the text to be dark */
+}
+
+.status-group {
+    margin-bottom: 25px;
+}
+
+.status-group > label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.location-radios {
+    display: flex;
+    gap: 20px;
+}
+.location-radios label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.seat-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+}
+
+.seat-btn {
+    background-color: rgba(255,255,255,0.2);
+    border: 1px solid var(--white-color);
+    color: var(--white-color);
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s;
+}
+
+.seat-btn.active, .seat-btn:hover {
+    background-color: var(--white-color);
+    color: var(--primary-orange);
+    font-weight: 600;
+}
+
+.end-journey-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--white-color);
+    color: var(--primary-orange);
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2em;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Mobile header adjustments for this page */
+.mobile-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: transparent;
+}
+.mobile-header h1 {
+    flex-grow: 1;
+    text-align: center;
+    color: var(--text-color);
+    margin: 0;
+}
+.back-button {
+    font-size: 1.2em;
+    color: var(--text-color);
+    text-decoration: none;
+}

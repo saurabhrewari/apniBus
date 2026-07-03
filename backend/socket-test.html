@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Socket Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 720px;
+            margin: 40px auto;
+            padding: 0 16px;
+            line-height: 1.5;
+        }
+
+        form {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        input, button {
+            padding: 10px 12px;
+            font-size: 16px;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        #logs {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            min-height: 220px;
+            padding: 12px;
+            background: #fafafa;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bus Tracking Socket Test</h1>
+    <p>Use this page to send location updates and listen for live broadcasts.</p>
+
+    <form id="locationForm">
+        <input id="serverUrl" type="text" value="http://localhost:5001" placeholder="Server URL">
+        <input id="busNumber" type="text" value="UP32-1001" placeholder="Bus Number">
+        <input id="latitude" type="number" step="any" value="28.6145" placeholder="Latitude">
+        <input id="longitude" type="number" step="any" value="77.2101" placeholder="Longitude">
+        <button type="button" id="connectBtn">Connect</button>
+        <button type="submit">Send Location</button>
+    </form>
+
+    <h2>Logs</h2>
+    <div id="logs"></div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+        const logs = document.getElementById('logs');
+        const form = document.getElementById('locationForm');
+        const connectBtn = document.getElementById('connectBtn');
+
+        let socket;
+
+        function addLog(message, data) {
+            const time = new Date().toLocaleTimeString();
+            const line = `[${time}] ${message}`;
+            logs.textContent += data ? `${line}\n${JSON.stringify(data, null, 2)}\n\n` : `${line}\n\n`;
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function connectSocket() {
+            const serverUrl = document.getElementById('serverUrl').value.trim();
+
+            if (socket) {
+                socket.disconnect();
+            }
+
+            socket = io(serverUrl);
+
+            socket.on('connect', () => addLog(`Connected: ${socket.id}`));
+            socket.on('broadcast-location', (data) => addLog('Received broadcast-location', data));
+            socket.on('location-error', (data) => addLog('Received location-error', data));
+            socket.on('disconnect', () => addLog('Disconnected'));
+        }
+
+        connectBtn.addEventListener('click', connectSocket);
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            if (!socket || !socket.connected) {
+                addLog('Connect first before sending location');
+                return;
+            }
+
+            const payload = {
+                busNumber: document.getElementById('busNumber').value.trim(),
+                latitude: Number(document.getElementById('latitude').value),
+                longitude: Number(document.getElementById('longitude').value)
+            };
+
+            socket.emit('receive-location', payload);
+            addLog('Sent receive-location', payload);
+        });
+    </script>
+</body>
+</html>

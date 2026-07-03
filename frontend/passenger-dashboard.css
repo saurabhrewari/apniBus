@@ -1,0 +1,136 @@
+/* Import all the styles from the driver dashboard to reuse the layout */
+@import url('driver-dashboard.css');
+
+/* Styles specific to the passenger dashboard content */
+.mobile-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: transparent;
+    padding-bottom: 0;
+}
+.mobile-header h1 {
+    flex-grow: 1;
+    text-align: center;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.search-card {
+    background-color: var(--white-color);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin: 20px 0 30px 0;
+}
+
+.input-container {
+    position: relative;
+    padding-left: 25px;
+    border-left: 2px dotted #ddd;
+}
+
+.input-wrapper {
+    position: relative;
+    margin-bottom: 25px;
+}
+.input-wrapper:last-child { margin-bottom: 0; }
+
+.input-wrapper::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-color: var(--white-color);
+    border: 3px solid var(--primary-orange);
+    border-radius: 50%;
+}
+
+.input-wrapper label {
+    display: block;
+    font-size: 0.9em;
+    color: var(--primary-orange);
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #eee;
+    padding: 5px 0;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+}
+
+.find-bus-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-orange);
+    color: var(--white-color);
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 25px;
+}
+
+/* BUS RESULTS LIST STYLING */
+.bus-list-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.bus-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--white-color);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+
+.bus-number {
+    background-color: var(--primary-orange);
+    color: var(--white-color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.9em;
+}
+
+.timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    gap: 10px;
+    margin: 0 15px;
+}
+
+.time { font-size: 0.9em; font-weight: 500; color: var(--text-color); }
+
+.path {
+    position: relative;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.line {
+    height: 1px;
+    background-color: #ddd;
+}
+
+.track-link {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: var(--primary-orange);
+    text-decoration: none;
+}

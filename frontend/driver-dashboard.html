@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard</title>
+    <link rel="stylesheet" href="driver-dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/i18next/i18next.min.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="your-logo.png" alt="App Logo">
+            </div>
+            <div class="profile-header">
+                <img src="profile-pic.jpg" alt="User Profile Picture">
+                <h2 class="user-name">Kishan Kumar</h2>
+                <p data-i18n="welcome">Welcome</p>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-th-large"></i> <span data-i18n="dashboard">Dashboard</span></a></li>
+                    <li><a href="#"><i class="fas fa-user-circle"></i> <span data-i18n="profile">Profile</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="mobile-header">
+                <div class="user-info">
+                     <img src="your-logo.png" alt="App Logo" class="header-logo">
+                     <h3 class="user-name">Kishan Kumar</h3>
+                </div>
+            </header>
+
+            <div class="search-container">
+                <input type="text" data-i18n="search" placeholder="Search">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <section class="categories-section">
+                <div class="section-header">
+                    <h2 data-i18n="categories">Categories</h2>
+                    <a href="#" data-i18n="show_all">Show All</a>
+                </div>
+                <div class="category-cards">
+                    <a href="route-setup.html" class="card" style="text-decoration: none; color: inherit;">
+                        <i class="fas fa-route"></i>
+                        <span data-i18n="route_setup">Route Setup</span>
+                    </a>
+                    <a href="live-status.html" class="card" style="text-decoration: none; color: inherit;">
+                        <i class="fas fa-satellite-dish"></i>
+                        <span data-i18n="live_status">Live Status</span>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="mobile-nav">
+        <a href="#" class="nav-item active">
+            <i class="fas fa-th-large"></i>
+            <span data-i18n="dashboard">Dashboard</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-user-circle"></i>
+            <span data-i18n="profile">Profile</span>
+        </a>
+    </footer>
+
+    <script src="dashboard.js"></script>
+    <script src="language-loader.js"></script>
+</body>
+</html>

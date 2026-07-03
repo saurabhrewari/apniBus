@@ -1,0 +1,224 @@
+/* General & Mobile First Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-orange: #F97B22;
+    --background-grey: #F5F5F5;
+    --text-dark: #333;
+    --text-light: #fff;
+    --card-bg: #fff;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-grey);
+    color: var(--text-dark);
+    overflow-x: hidden;
+}
+
+.role-page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- Top Section (Image, Logo, Text) --- */
+.top-section {
+    background-color: black;
+    color: var(--text-light);
+    padding: 20px;
+    padding-bottom: 0; /* No padding at bottom for seamless overlap */
+    position: relative;
+    height: 40vh; /* Image area for mobile */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+.world-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.3; /* Subtle map effect */
+    z-index: 1;
+}
+
+.role-header {
+    position: absolute; /* Logo ko top-right mein set karne ke liye */
+    top: 20px;
+    right: 20px;
+    z-index: 3; /* Logo map aur text se upar dikhe */
+}
+
+.app-logo {
+    width: 50px; /* Logo ka size */
+    height: 50px;
+    border-radius: 50%; /* Circle shape */
+    object-fit: cover;
+    border: 2px solid var(--primary-orange);
+    box-shadow: 0 0 10px rgba(249, 123, 34, 0.5); /* Orange glow */
+}
+
+.text-content {
+    position: relative; /* Map se upar aane ke liye */
+    z-index: 2;
+    padding-left: 10px; /* Text ko thoda andar karne ke liye */
+    padding-bottom: 30px; /* Bottom section se overlap ke liye space */
+}
+
+.text-content h1 {
+    font-size: 2.2em;
+    margin: 0;
+    font-weight: 700;
+}
+
+.text-content p {
+    font-size: 0.9em;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+/* --- Bottom Selection Section --- */
+.bottom-selection-section {
+    flex-grow: 1;
+    background-color: var(--card-bg);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    margin-top: -30px; /* Overlap effect */
+    position: relative;
+    z-index: 4; /* Top section ke upar aaye */
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.05); /* Soft shadow on top */
+}
+
+.options-group {
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.role-option {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Icon aur text ko left align karein */
+    width: 100%;
+    padding: 15px 20px;
+    background-color: var(--primary-orange);
+    color: var(--text-light);
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(249, 123, 34, 0.3);
+}
+
+.role-option i {
+    font-size: 1.5em;
+    margin-right: 15px; /* Icon aur text ke beech space */
+}
+
+.role-option:hover {
+    background-color: #e66a1a; /* Thoda dark orange hover par */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(249, 123, 34, 0.4);
+}
+
+.role-option.selected {
+    border: 2px solid white; /* Selected state */
+    background-color: #e66a1a;
+    box-shadow: 0 0 0 3px var(--primary-orange), 0 0 15px rgba(249, 123, 34, 0.6);
+}
+
+.next-btn {
+    width: 100%;
+    max-width: 350px;
+    padding: 15px;
+    background-color: var(--primary-orange);
+    color: var(--text-light);
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(249, 123, 34, 0.3);
+}
+
+.next-btn:hover {
+    background-color: #e66a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(249, 123, 34, 0.4);
+}
+
+/* ============================================= */
+/* DESKTOP STYLES (768px se upar)               */
+/* ============================================= */
+@media (min-width: 768px) {
+    .role-page-container {
+        flex-direction: row; /* Desktop par side-by-side */
+    }
+
+    .top-section {
+        width: 60%; /* Left half for image */
+        height: 100vh;
+        padding-bottom: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .text-content {
+        padding-left: 0;
+        text-align: center;
+        margin-bottom: 0;
+    }
+    
+    .text-content h1 {
+        font-size: 3.5em; /* Bigger text on desktop */
+    }
+
+    .text-content p {
+        font-size: 1.1em;
+    }
+
+    .role-header {
+        top: 30px;
+        right: 30px;
+    }
+
+    .app-logo {
+        width: 70px; /* Desktop par thoda bada logo */
+        height: 70px;
+    }
+
+    .bottom-selection-section {
+        width: 40%; /* Right half for selection */
+        height: 100vh;
+        margin-top: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 30px; /* Bottom-left corner round karein */
+        box-shadow: -5px 0 20px rgba(0,0,0,0.05); /* Left side mein shadow */
+        justify-content: center; /* Vertically center content */
+    }
+
+    .options-group {
+        max-width: 400px; /* Options ka max width desktop par */
+    }
+
+    .next-btn {
+        max-width: 400px;
+    }
+}

@@ -1,0 +1,281 @@
+/* ============================================= */
+/* GENERAL & MOBILE FIRST STYLES                 */
+/* ============================================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-orange: #F97B22;
+    --light-orange: #FEE8B0;
+    --background-color: #F5F5F5;
+    --text-color: #333;
+    --white-color: #fff;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    /* Extra padding at bottom to avoid overlap with mobile nav */
+    padding-bottom: 80px; 
+}
+
+/* Mobile par sidebar hide rahega */
+.sidebar {
+    display: none;
+}
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Mobile Header */
+.mobile-header {
+    background-color: var(--primary-orange);
+    color: var(--white-color);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mobile-header .user-info {
+    display: flex;
+    align-items: center;
+}
+
+.mobile-header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid var(--white-color);
+}
+
+.mobile-header h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.mobile-header span {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+/* Main Content */
+.main-content {
+    padding: 20px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    background-color: var(--white-color);
+    padding: 5px 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin-top: 20px; /* Header par overlapping effect */
+    position: relative;
+}
+
+.search-container input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 10px 5px;
+    font-size: 1em;
+}
+
+.search-container i {
+    color: var(--primary-orange);
+}
+
+/* Categories */
+.categories-section {
+    margin-top: 30px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.3em;
+    color: var(--text-color);
+}
+
+.section-header a {
+    text-decoration: none;
+    color: var(--primary-orange);
+    font-weight: 500;
+}
+
+.category-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.card {
+    background-color: var(--white-color);
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card i {
+    font-size: 2em;
+    color: var(--primary-orange);
+    margin-bottom: 10px;
+}
+
+.card span {
+    display: block;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* Mobile Bottom Navigation */
+.mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--white-color);
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #aaa;
+}
+
+.nav-item i { font-size: 1.4em; }
+.nav-item span { font-size: 0.8em; margin-top: 5px; }
+.nav-item.active { color: var(--primary-orange); }
+
+/* ============================================= */
+/* LOGO STYLING                                  */
+/* ============================================= */
+
+/* Mobile Header Logo */
+.mobile-header .header-logo {
+    width: 40px; /* Chhota logo header ke liye */
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: none;
+}
+
+/* Desktop Sidebar Logo */
+.sidebar-logo {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: left;
+}
+
+.sidebar-logo img {
+    max-width: 150px; /* Sidebar ke liye bada logo */
+    height: auto;
+    border-radius: 50%;
+}
+
+/* ============================================= */
+/* DESKTOP STYLES (768px se upar)                */
+/* ============================================= */
+@media (min-width: 768px) {
+    body {
+        padding-bottom: 0; /* Desktop par bottom padding ki zaroorat nahi */
+    }
+
+    .dashboard-container {
+        display: grid;
+        grid-template-columns: 280px 1fr; /* Left Sidebar (280px) aur Right Main Content */
+        height: 100vh;
+    }
+
+    /* Desktop par mobile header aur nav hide kar denge */
+    .mobile-header, .mobile-nav {
+        display: none;
+    }
+
+    /* Sidebar ko show aur style karenge */
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--primary-orange);
+        color: var(--white-color);
+        padding: 30px;
+    }
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .profile-header img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 4px solid var(--white-color);
+        margin-bottom: 15px;
+    }
+    .profile-header h2 { margin: 0; }
+    .profile-header p { opacity: 0.8; margin-top: 5px; }
+
+    .main-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .main-nav li a {
+        display: block;
+        color: var(--white-color);
+        text-decoration: none;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        transition: background-color 0.3s;
+    }
+    .main-nav li a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    .main-nav li.active a {
+        background-color: var(--white-color);
+        color: var(--primary-orange);
+        font-weight: 600;
+    }
+    .main-nav li a i {
+        margin-right: 15px;
+        width: 20px; /* To align text properly */
+    }
+
+    /* Main content ko desktop ke liye adjust karenge */
+    .main-content {
+        padding: 40px;
+        overflow-y: auto; /* Agar content zyada ho to scrollable ho */
+    }
+    .search-container {
+        margin-top: 0; /* Desktop par overlapping nahi chahiye */
+        max-width: 500px;
+    }
+}

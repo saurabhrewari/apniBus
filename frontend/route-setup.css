@@ -1,0 +1,104 @@
+/* Import all the styles from the driver dashboard to reuse the layout */
+@import url('driver-dashboard.css');
+
+/* New styles specific to the setup form */
+.setup-form {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    background-color: var(--primary-orange);
+    color: var(--white-color);
+    font-size: 0.8em;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.location-toggle {
+    display: flex;
+    border: 1px solid var(--primary-orange);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background-color: var(--white-color);
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+}
+
+.toggle-btn.active {
+    background-color: var(--primary-orange);
+    color: var(--white-color);
+}
+
+.start-journey-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-orange);
+    color: var(--white-color);
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2em;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 40px;
+    box-shadow: 0 4px 15px rgba(249, 123, 34, 0.4);
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+}
+
+/* Mobile header adjustments for this page */
+.mobile-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: transparent; /* No orange bg for this header */
+}
+.mobile-header h1 {
+    flex-grow: 1;
+    text-align: center;
+    color: var(--text-color);
+    margin: 0;
+}
+.back-button {
+    font-size: 1.2em;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+@media (min-width: 768px) {
+    .start-journey-btn {
+        position: static; /* Button should be in normal flow on desktop */
+        transform: none;
+        max-width: 100%;
+    }
+}
