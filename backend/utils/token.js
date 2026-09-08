@@ -41,6 +41,11 @@ function verifyToken(token) {
             return null;
         }
 
+        const header = base64UrlDecode(encodedHeader);
+        if (header.alg !== 'HS256' || header.typ !== 'JWT') {
+            return null;
+        }
+
         const expectedSignature = crypto
             .createHmac('sha256', getSecret())
             .update(`${encodedHeader}.${encodedBody}`)
