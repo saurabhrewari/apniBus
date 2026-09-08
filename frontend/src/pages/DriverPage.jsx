@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../lib/router';
 import { io } from 'socket.io-client';
 import api from '../lib/api';
 import { getSeatSummary, mergeLiveBus, normalizeBus, stopLabel } from '../lib/bus';
@@ -95,6 +95,9 @@ export default function DriverPage() {
 
     const socket = io(SOCKET_URL, {
       transports: ['websocket', 'polling'],
+      auth: {
+        token: window.localStorage.getItem('apnibus.authToken') || ''
+      },
       reconnection: true,
       reconnectionAttempts: Infinity,
       reconnectionDelay: 1000,
@@ -340,7 +343,6 @@ export default function DriverPage() {
         setIsDriverUnlocked(true);
       })
       .catch((loginError) => {
-        console.error(loginError);
         setIsDriverUnlocked(false);
         setError(loginError.response?.data?.msg || 'Driver ID or password is incorrect.');
       });

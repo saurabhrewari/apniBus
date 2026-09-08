@@ -31,30 +31,39 @@ function signToken(payload) {
 }
 
 function verifyToken(token) {
-    if (!token || typeof token !== 'string') {
+    try {
+        if (!token || typeof token !== 'string') {
+            return null;
+        }
+
+        const [encodedHeader, encodedBody, signature] = token.split('.');
+        if (!encodedHeader || !encodedBody || !signature) {
+            return null;
+        }
+
+        const expectedSignature = crypto
+            .createHmac('sha256', getSecret())
+            .update(`${encodedHeader}.${encodedBody}`)
+            .digest('base64url');
+
+        const signatureBuffer = Buffer.from(signature);
+        const expectedBuffer = Buffer.from(expectedSignature);
+        if (
+            signatureBuffer.length !== expectedBuffer.length ||
+            !crypto.timingSafeEqual(signatureBuffer, expectedBuffer)
+        ) {
+            return null;
+        }
+
+        const payload = base64UrlDecode(encodedBody);
+        if (payload.exp && payload.exp < Date.now()) {
+            return null;
+        }
+
+        return payload;
+    } catch (_error) {
         return null;
     }
-
-    const [encodedHeader, encodedBody, signature] = token.split('.');
-    if (!encodedHeader || !encodedBody || !signature) {
-        return null;
-    }
-
-    const expectedSignature = crypto
-        .createHmac('sha256', getSecret())
-        .update(`${encodedHeader}.${encodedBody}`)
-        .digest('base64url');
-
-    if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
-        return null;
-    }
-
-    const payload = base64UrlDecode(encodedBody);
-    if (payload.exp && payload.exp < Date.now()) {
-        return null;
-    }
-
-    return payload;
 }
 
 module.exports = {

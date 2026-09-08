@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from '../lib/router';
 import { io } from 'socket.io-client';
 import RouteDetails from '../components/RouteDetails';
 import api from '../lib/api';

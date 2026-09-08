@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from '../lib/router';
 import api from '../lib/api';
-import { cacheRoute, normalizeBus, saveRecentBus, stopLabel } from '../lib/bus';
+import { cacheRoute, isBusOnline, normalizeBus, saveRecentBus, stopLabel } from '../lib/bus';
 
 function landmarkForBus(bus) {
   if (bus.landmark) {
@@ -85,7 +85,9 @@ export default function SearchResultsPage() {
           {results.length > 0 ? (
             results.map((bus) => {
               const eta = bus.eta;
-              const isDelayed = eta?.status === 'Delayed';
+              const online = isBusOnline(bus);
+              const isDelayed = online && eta?.status === 'Delayed';
+              const statusLabel = online ? eta?.status || 'Awaiting ETA' : bus.liveStatus === 'inactive' ? 'Inactive' : 'Offline';
 
               return (
                 <Link
@@ -108,10 +110,14 @@ export default function SearchResultsPage() {
                     <div className="flex flex-wrap gap-2">
                       <span
                         className={`rounded-full px-3 py-2 text-xs font-semibold ${
-                          isDelayed ? 'bg-rose-500/15 text-rose-100' : 'bg-moss/15 text-emerald-100'
+                          isDelayed
+                            ? 'bg-rose-500/15 text-rose-100'
+                            : online
+                              ? 'bg-moss/15 text-emerald-100'
+                              : 'bg-white/10 text-slate-200'
                         }`}
                       >
-                        {eta?.status || 'Awaiting ETA'}
+                        {statusLabel}
                       </span>
                       <span
                         className={`rounded-full px-3 py-2 text-xs font-semibold ${

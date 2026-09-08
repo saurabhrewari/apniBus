@@ -44,11 +44,14 @@ function formatBusResult(bus, schedules = []) {
         (stops.length > 1
             ? `${stopName(stops[0])} to ${stopName(stops[stops.length - 1])}`
             : routeNumber);
-    const eta = calculateEtaForBus(
-        { ...bus.toObject(), stops: routeStops },
-        schedules,
-        bus.currentLocation
-    );
+    const liveStatus = getLiveStatus(bus);
+    const eta = liveStatus === 'online'
+        ? calculateEtaForBus(
+            { ...bus.toObject(), stops: routeStops },
+            schedules,
+            bus.currentLocation
+        )
+        : null;
 
     return {
         _id: bus._id,
@@ -65,11 +68,12 @@ function formatBusResult(bus, schedules = []) {
         occupiedSeats: bus.occupiedSeats || 0,
         totalSeats: bus.totalSeats || 30,
         seatStatus: seatStatus(bus),
-        liveStatus: getLiveStatus(bus),
+        liveStatus,
         lastActiveAt: bus.lastActiveAt,
         isActive: bus.isActive,
-        isJourneyActive: Boolean(bus.isJourneyActive),
-        eta: hasEta(eta) ? eta : hasEta(bus.lastEta) ? bus.lastEta : null,
+        isJourneyActive: liveStatus === 'online' && Boolean(bus.isJourneyActive),
+        eta: hasEta(eta) ? eta : null,
+        staleEta: liveStatus === 'online' ? null : hasEta(bus.lastEta) ? bus.lastEta : null,
         schedules: schedules.map((schedule) => ({
             stopId: schedule.stopId,
             stopSequence: schedule.stopSequence,

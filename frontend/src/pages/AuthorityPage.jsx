@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../lib/router';
 import { io } from 'socket.io-client';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import api from '../lib/api';
@@ -205,7 +205,6 @@ export default function AuthorityPage() {
       setIsUnlocked(true);
       setError('');
     } catch (loginError) {
-      console.error(loginError);
       setIsUnlocked(false);
       setError(loginError.response?.data?.msg || 'This username or password is incorrect.');
     }

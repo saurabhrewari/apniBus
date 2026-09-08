@@ -22,6 +22,7 @@ const {
 const { validateCoordinates } = require('./middleware/validate');
 const { calculateEtaForBus, serializeStop } = require('./utils/tracking');
 const { recordAudit } = require('./utils/audit');
+const { verifyToken } = require('./utils/token');
 
 function hasEta(value) {
     return value && Number.isFinite(Number(value.etaMinutes));
@@ -167,6 +168,17 @@ const io = new socketio.Server(server, {
     }
 });
 
+io.use((socket, next) => {
+    const token = socket.handshake.auth?.token;
+    socket.data.user = token ? verifyToken(token) : null;
+
+    if (token && !socket.data.user) {
+        return next(new Error('Invalid or expired authentication token'));
+    }
+
+    return next();
+});
+
 // ============== MIDDLEWARE ==============
 app.use(securityHeaders);
 app.use(requestLogger);
@@ -174,7 +186,7 @@ app.use('/api', createRateLimiter({
     windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS) || 1000 * 60,
     maxRequests: Number(process.env.RATE_LIMIT_MAX) || 180
 }));
-app.use(express.json());
+app.use(express.json({ limit: '100kb' }));
 
 app.get('/api/health', (_req, res) => {
     const mongoStates = {
@@ -283,6 +295,30 @@ setInterval(async () => {
 io.on("connection", function (socket) {
     console.log(`A user connected via WebSocket`);
 
+    function canMutateBus(bus) {
+        if (String(process.env.REQUIRE_AUTH || '').toLowerCase() !== 'true') {
+            return true;
+        }
+
+        const user = socket.data.user;
+        if (!user || !['driver', 'authority'].includes(user.role)) {
+            socket.emit('location-error', { msg: 'Authenticated driver access is required.' });
+            return false;
+        }
+
+        if (
+            user.role === 'driver' &&
+            bus?.assignedDriverId &&
+            user.driverId &&
+            String(bus.assignedDriverId) !== String(user.driverId)
+        ) {
+            socket.emit('location-error', { msg: 'This bus is not assigned to your driver account.' });
+            return false;
+        }
+
+        return true;
+    }
+
     socket.on('join-route', (routeId) => {
         if (!routeId) {
             return;
@@ -305,6 +341,22 @@ io.on("connection", function (socket) {
             }
 
             const query = busId ? { _id: busId } : { busNumber };
+            const existingBus = await Bus.findOne(query)
+                .populate('stops')
+                .populate({
+                    path: 'route',
+                    populate: { path: 'stops' }
+                });
+
+            if (!existingBus) {
+                socket.emit('location-error', { msg: 'Bus not found' });
+                return;
+            }
+
+            if (!canMutateBus(existingBus)) {
+                return;
+            }
+
             const route = routeNumber ? await Route.findOne({ routeNumber }) : null;
             const locationSet = {
                 currentLocation: {
@@ -461,6 +513,10 @@ io.on("connection", function (socket) {
                 return;
             }
 
+            if (!canMutateBus(bus)) {
+                return;
+            }
+
             const routeStops = bus.route?.stops?.length ? bus.route.stops : bus.stops;
             let checkedIndex = Number.isInteger(Number(stopIndex)) ? Number(stopIndex) : -1;
 
@@ -577,6 +633,10 @@ io.on("connection", function (socket) {
                 return;
             }
 
+            if (!canMutateBus(bus)) {
+                return;
+            }
+
             if (Number.isFinite(Number(totalSeats))) {
                 bus.totalSeats = Math.max(Number(totalSeats), 0);
             }
@@ -654,6 +714,10 @@ io.on("connection", function (socket) {
 
             const bus = await Bus.findOne(busId ? { _id: busId } : { busNumber });
             if (!bus) {
+                return;
+            }
+
+            if (!canMutateBus(bus)) {
                 return;
             }
 

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { CircleMarker, MapContainer, Marker, Polyline, Popup, TileLayer } from 'react-leaflet';
 import { busMarkerIcon } from './BusMarkerIcon';
 import MapViewport from './MapViewport';
-import { getSeatSummary, stopLabel } from '../lib/bus';
+import { getSeatSummary, isBusOnline, stopLabel } from '../lib/bus';
 
 const fallbackCenter = {
   latitude: 28.6139,
@@ -38,7 +38,9 @@ export default function RouteDetails({ bus, onRefresh }) {
   }
 
   const eta = bus.eta || bus.lastEta;
-  const isDelayed = eta?.status === 'Delayed';
+  const online = isBusOnline(bus);
+  const liveEta = online ? eta : null;
+  const isDelayed = liveEta?.status === 'Delayed';
   const seatSummary = getSeatSummary(bus);
   const routePositions = (bus.stops || [])
     .filter((stop) => stop.coordinates?.latitude && stop.coordinates?.longitude)
@@ -74,10 +76,14 @@ export default function RouteDetails({ bus, onRefresh }) {
             </span>
             <span
               className={`rounded-full px-3 py-2 text-xs font-semibold ${
-                isDelayed ? 'bg-rose-500/15 text-rose-100' : 'bg-moss/15 text-emerald-100'
+                isDelayed
+                  ? 'bg-rose-500/15 text-rose-100'
+                  : online
+                    ? 'bg-moss/15 text-emerald-100'
+                    : 'bg-white/10 text-slate-200'
               }`}
             >
-              {eta?.status || 'Awaiting ETA'}
+              {online ? liveEta?.status || 'Awaiting ETA' : 'Offline'}
             </span>
           </div>
         </div>
@@ -88,7 +94,7 @@ export default function RouteDetails({ bus, onRefresh }) {
               Next stop
             </p>
             <p className="mt-2 font-semibold text-white">
-              {eta?.nextStopName || stopLabel(bus.stops?.[bus.currentStopIndex || 0])}
+              {liveEta?.nextStopName || stopLabel(bus.stops?.[bus.currentStopIndex || 0])}
             </p>
           </div>
           <div className="rounded-xl border border-white/10 bg-black/25 p-4">
@@ -96,7 +102,7 @@ export default function RouteDetails({ bus, onRefresh }) {
               ETA
             </p>
             <p className="mt-2 font-semibold text-white">
-              {eta?.etaMinutes ? `${eta.etaMinutes} min` : 'Waiting for GPS'}
+              {online ? liveEta?.etaMinutes ? `${liveEta.etaMinutes} min` : 'Waiting for GPS' : 'Bus offline'}
             </p>
           </div>
           <div className="rounded-xl border border-white/10 bg-black/25 p-4">
@@ -104,7 +110,7 @@ export default function RouteDetails({ bus, onRefresh }) {
               Delay
             </p>
             <p className={`mt-2 font-semibold ${isDelayed ? 'text-rose-200' : 'text-emerald-200'}`}>
-              {eta?.delayMinutes > 0 ? `${eta.delayMinutes} min late` : 'On time'}
+              {online ? liveEta?.delayMinutes > 0 ? `${liveEta.delayMinutes} min late` : liveEta ? 'On time' : 'Waiting' : 'Not available'}
             </p>
           </div>
           <div className="rounded-xl border border-white/10 bg-black/25 p-4">
@@ -202,7 +208,7 @@ export default function RouteDetails({ bus, onRefresh }) {
                   <Popup>
                     <div className="space-y-1 text-sm">
                       <p className="font-semibold">{bus.busNumber}</p>
-                      <p>{eta?.nextStopName || 'Next stop pending'}</p>
+                      <p>{liveEta?.nextStopName || 'Next stop pending'}</p>
                     </div>
                   </Popup>
                 </Marker>
@@ -219,11 +225,11 @@ export default function RouteDetails({ bus, onRefresh }) {
             style={{ height: `calc(${progressPercent}% - 0.5rem)` }}
           />
           {bus.stops?.map((stop, index) => {
-            const isNextStop = eta?.nextStopName === stopLabel(stop);
+            const isNextStop = liveEta?.nextStopName === stopLabel(stop);
             const passed = isStopPassed(index, bus);
             const schedule = bus.schedules?.find((item) => Number(item.stopSequence) === index);
-            const estimatedText = isNextStop && eta?.etaMinutes !== undefined
-              ? `${eta.etaMinutes} min`
+            const estimatedText = isNextStop && liveEta?.etaMinutes !== undefined
+              ? `${liveEta.etaMinutes} min`
               : passed
                 ? 'Passed'
                 : 'Pending';

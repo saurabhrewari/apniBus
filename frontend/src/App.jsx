@@ -1,5 +1,5 @@
-import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { matchPath, RouteParamsProvider, useLocation, useNavigate } from './lib/router';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const DriverPage = lazy(() => import('./pages/DriverPage'));
@@ -8,6 +8,16 @@ const SearchResultsPage = lazy(() => import('./pages/SearchResultsPage'));
 const LiveStatusPage = lazy(() => import('./pages/LiveStatusPage'));
 const AuthorityPage = lazy(() => import('./pages/AuthorityPage'));
 const AuthorityBusStatusPage = lazy(() => import('./pages/AuthorityBusStatusPage'));
+
+const routes = [
+  { path: '/', element: <HomePage /> },
+  { path: '/driver', element: <DriverPage /> },
+  { path: '/passenger', element: <PassengerPage /> },
+  { path: '/search-results', element: <SearchResultsPage /> },
+  { path: '/live-status', element: <LiveStatusPage /> },
+  { path: '/authority', element: <AuthorityPage /> },
+  { path: '/authority/bus/:busNumber', element: <AuthorityBusStatusPage /> }
+];
 
 function PageLoader() {
   return (
@@ -19,19 +29,31 @@ function PageLoader() {
   );
 }
 
+function RedirectHome() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate('/', { replace: true });
+  }, [navigate]);
+
+  return <PageLoader />;
+}
+
 export default function App() {
+  const location = useLocation();
+  const matchedRoute = routes
+    .map((route) => ({ route, match: matchPath(route.path, location.pathname) }))
+    .find((item) => item.match);
+
+  if (!matchedRoute) {
+    return <RedirectHome />;
+  }
+
   return (
     <Suspense fallback={<PageLoader />}>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/driver" element={<DriverPage />} />
-        <Route path="/passenger" element={<PassengerPage />} />
-        <Route path="/search-results" element={<SearchResultsPage />} />
-        <Route path="/live-status" element={<LiveStatusPage />} />
-        <Route path="/authority" element={<AuthorityPage />} />
-        <Route path="/authority/bus/:busNumber" element={<AuthorityBusStatusPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <RouteParamsProvider params={matchedRoute.match.params}>
+        {matchedRoute.route.element}
+      </RouteParamsProvider>
     </Suspense>
   );
 }

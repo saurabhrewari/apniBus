@@ -14,6 +14,10 @@ export function hasEta(value) {
   return value && Number.isFinite(Number(value.etaMinutes));
 }
 
+export function isBusOnline(bus) {
+  return bus?.liveStatus === 'online';
+}
+
 export function getSeatStatus(bus) {
   if (bus?.seatStatus) {
     return bus.seatStatus;
@@ -70,7 +74,10 @@ export function normalizeBus(bus) {
       bus.destination || bus.route?.destination || stops[stops.length - 1]?.stopName || '',
     stops,
     seatStatus: getSeatStatus(bus),
-    eta: hasEta(bus.eta) ? bus.eta : hasEta(bus.lastEta) ? bus.lastEta : null
+    eta: isBusOnline(bus) && hasEta(bus.eta) ? bus.eta : null,
+    staleEta: !isBusOnline(bus) && hasEta(bus.staleEta || bus.lastEta)
+      ? bus.staleEta || bus.lastEta
+      : null
   };
 }
 
@@ -94,7 +101,8 @@ export function mergeLiveBus(existingBus, payload) {
     liveStatus: payload.liveStatus ?? existingBus?.liveStatus,
     lastActiveAt: payload.lastActiveAt ?? existingBus?.lastActiveAt,
     isActive: payload.isActive ?? existingBus?.isActive,
-    eta: payload.eta ?? existingBus?.eta,
+    eta: payload.liveStatus === 'online' ? payload.eta ?? existingBus?.eta : null,
+    staleEta: payload.liveStatus === 'online' ? null : payload.staleEta ?? existingBus?.staleEta,
     landmark: payload.landmark ?? existingBus?.landmark,
     updatedAt: payload.updatedAt ?? existingBus?.updatedAt
   });

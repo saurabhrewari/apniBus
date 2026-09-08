@@ -8,16 +8,16 @@
   "theme_color": "#07110f",
   "icons": [
     {
-      "src": "/your-logo.png",
+      "src": "/images/bus.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/your-logo.png",
+      "src": "/images/bus.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }

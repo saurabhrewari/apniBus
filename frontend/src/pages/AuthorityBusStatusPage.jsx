@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from '../lib/router';
 import { io } from 'socket.io-client';
 import api from '../lib/api';
-import { getSeatSummary, mergeLiveBus, normalizeBus, stopLabel } from '../lib/bus';
+import { getSeatSummary, isBusOnline, mergeLiveBus, normalizeBus, stopLabel } from '../lib/bus';
 import { SOCKET_URL } from '../config';
 
 function isStopPassed(index, bus) {
@@ -114,7 +114,8 @@ export default function AuthorityBusStatusPage() {
     return () => socket.disconnect();
   }, [bus?.routeNumber, bus?.routeId, decodedBusNumber]);
 
-  const eta = bus?.eta || bus?.lastEta;
+  const online = isBusOnline(bus);
+  const eta = online ? bus?.eta || bus?.lastEta : null;
   const seats = getSeatSummary(bus);
   const progressPercent = useMemo(() => getProgressPercent(bus), [bus]);
   const nextStopIndex = Math.min(Number(bus?.currentStopIndex) || 0, Math.max((bus?.stops?.length || 1) - 1, 0));
@@ -161,8 +162,8 @@ export default function AuthorityBusStatusPage() {
                 ['Driver', bus.assignedDriverId || 'Unassigned'],
                 ['Location', formatLocation(bus)],
                 ['Last Active', formatTime(bus.lastActiveAt)],
-                ['ETA', eta?.etaMinutes ? `${eta.etaMinutes} min` : 'Waiting'],
-                ['Timing', eta?.delayMinutes > 0 ? `${eta.delayMinutes} min late` : eta?.status || 'On time'],
+                ['ETA', online ? eta?.etaMinutes ? `${eta.etaMinutes} min` : 'Waiting' : 'Bus offline'],
+                ['Timing', online ? eta?.delayMinutes > 0 ? `${eta.delayMinutes} min late` : eta?.status || 'Waiting' : 'Not available'],
                 ['Seats', `${seats.occupiedSeats}/${seats.totalSeats} occupied`],
                 ['Status', bus.liveStatus || 'offline']
               ].map(([label, value]) => (
