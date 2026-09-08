@@ -20,6 +20,7 @@ Date: 2026-09-08
 - JWT tests: malformed signatures and unsupported algorithms are rejected; valid tokens continue to verify.
 - Render manifest: explicit production `NODE_ENV` and deployed `CORS_ORIGINS` are configured.
 - Deployed API matrix: public stops/routes/schedules/buses/search endpoints returned 200; analytics, operations, and `/api/users/me` correctly returned 401 without a session.
+- Auth UX: Authority and Driver now restore valid sessions through `/api/users/me` and provide explicit logout controls; build verification passed. A valid credential session is still required for browser success-path execution.
 
 ## Partial Or Data-Dependent
 

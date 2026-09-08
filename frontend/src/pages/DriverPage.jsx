@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '../lib/router';
 import { io } from 'socket.io-client';
-import api from '../lib/api';
+import api, { AUTH_TOKEN_KEY, clearAuthToken, getAuthToken } from '../lib/api';
 import { getSeatSummary, mergeLiveBus, normalizeBus, stopLabel } from '../lib/bus';
 import { SOCKET_URL } from '../config';
 
@@ -79,6 +79,26 @@ export default function DriverPage() {
   }, [isDriverUnlocked]);
 
   useEffect(() => {
+    const token = getAuthToken();
+    if (!token) {
+      return;
+    }
+
+    api.get('/api/users/me')
+      .then((response) => {
+        if (response.data.user?.role === 'driver') {
+          setDriverId(response.data.user.driverId || response.data.user.email || '');
+          setIsDriverUnlocked(true);
+        } else {
+          clearAuthToken();
+        }
+      })
+      .catch(() => {
+        clearAuthToken();
+      });
+  }, []);
+
+  useEffect(() => {
     return () => {
       stopTrip(true);
     };
@@ -96,7 +116,7 @@ export default function DriverPage() {
     const socket = io(SOCKET_URL, {
       transports: ['websocket', 'polling'],
       auth: {
-        token: window.localStorage.getItem('apnibus.authToken') || ''
+        token: getAuthToken()
       },
       reconnection: true,
       reconnectionAttempts: Infinity,
@@ -337,7 +357,7 @@ export default function DriverPage() {
           return;
         }
         if (response.data.token) {
-          window.localStorage.setItem('apnibus.authToken', response.data.token);
+          window.localStorage.setItem(AUTH_TOKEN_KEY, response.data.token);
         }
         setError('');
         setIsDriverUnlocked(true);
@@ -346,6 +366,17 @@ export default function DriverPage() {
         setIsDriverUnlocked(false);
         setError(loginError.response?.data?.msg || 'Driver ID or password is incorrect.');
       });
+  }
+
+  function logout() {
+    stopTrip(true);
+    clearAuthToken();
+    setIsDriverUnlocked(false);
+    setDriverPin('');
+    setBuses([]);
+    setRoutes([]);
+    setStatus(defaultStatus);
+    setError('');
   }
 
   if (!isDriverUnlocked) {
@@ -401,6 +432,13 @@ export default function DriverPage() {
           >
             Back Home
           </Link>
+          <button
+            type="button"
+            onClick={logout}
+            className="inline-flex w-fit rounded-full border border-rose-400/30 bg-rose-500/10 px-5 py-3 text-sm font-medium text-rose-100 transition hover:bg-rose-500/20"
+          >
+            Log out
+          </button>
         </header>
 
         <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">

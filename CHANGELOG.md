@@ -17,6 +17,7 @@
 - Added JWT header validation so only `HS256` JWT tokens are accepted.
 - Made Render production mode and the deployed CORS origin explicit in `render.yaml`.
 - Verified the deployed public/protected API status matrix and recorded it in the QA report.
+- Added auth session restoration through `/api/users/me` and explicit logout controls for authority and driver consoles.
 
 ## Verification
 

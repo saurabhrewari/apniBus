@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from '../lib/router';
 import { io } from 'socket.io-client';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import api from '../lib/api';
+import api, { AUTH_TOKEN_KEY, clearAuthToken } from '../lib/api';
 import { busMarkerIcon } from '../components/BusMarkerIcon';
 import MapViewport from '../components/MapViewport';
 import { getSeatSummary, mergeLiveBus, normalizeBus } from '../lib/bus';
@@ -147,6 +147,26 @@ export default function AuthorityPage() {
   }, [isUnlocked]);
 
   useEffect(() => {
+    const token = window.localStorage.getItem(AUTH_TOKEN_KEY);
+    if (!token) {
+      return;
+    }
+
+    api.get('/api/users/me')
+      .then((response) => {
+        if (response.data.user?.role === 'authority') {
+          setIsUnlocked(true);
+          setAdminEmail(response.data.user.email || '');
+        } else {
+          clearAuthToken();
+        }
+      })
+      .catch(() => {
+        clearAuthToken();
+      });
+  }, []);
+
+  useEffect(() => {
     if (!isUnlocked) {
       return undefined;
     }
@@ -200,7 +220,7 @@ export default function AuthorityPage() {
         return;
       }
       if (response.data.token) {
-        window.localStorage.setItem('apnibus.authToken', response.data.token);
+        window.localStorage.setItem(AUTH_TOKEN_KEY, response.data.token);
       }
       setIsUnlocked(true);
       setError('');
@@ -208,6 +228,22 @@ export default function AuthorityPage() {
       setIsUnlocked(false);
       setError(loginError.response?.data?.msg || 'This username or password is incorrect.');
     }
+  }
+
+  function logout() {
+    clearAuthToken();
+    setIsUnlocked(false);
+    setAdminPassword('');
+    setBuses([]);
+    setRoutes([]);
+    setStops([]);
+    setSchedules([]);
+    setAnalytics(null);
+    setDataQuality(null);
+    setRecentTrips([]);
+    setAuditLogs([]);
+    setStatus('Logged out.');
+    setError('');
   }
 
   async function saveBus(event) {
@@ -583,6 +619,13 @@ export default function AuthorityPage() {
               className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               Refresh
+            </button>
+            <button
+              type="button"
+              onClick={logout}
+              className="rounded-full border border-rose-400/30 bg-rose-500/10 px-5 py-3 text-sm font-semibold text-rose-100 transition hover:bg-rose-500/20"
+            >
+              Log out
             </button>
             <Link
               to="/"
