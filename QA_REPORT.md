@@ -19,6 +19,7 @@ Date: 2026-09-08
 - Local server lifecycle: health passed after restart and the listening port was released after shutdown.
 - JWT tests: malformed signatures and unsupported algorithms are rejected; valid tokens continue to verify.
 - Render manifest: explicit production `NODE_ENV` and deployed `CORS_ORIGINS` are configured.
+- Deployed API matrix: public stops/routes/schedules/buses/search endpoints returned 200; analytics, operations, and `/api/users/me` correctly returned 401 without a session.
 
 ## Partial Or Data-Dependent
 
