@@ -306,14 +306,14 @@ io.on("connection", function (socket) {
             return false;
         }
 
-        if (
-            user.role === 'driver' &&
-            bus?.assignedDriverId &&
-            user.driverId &&
-            String(bus.assignedDriverId) !== String(user.driverId)
-        ) {
-            socket.emit('location-error', { msg: 'This bus is not assigned to your driver account.' });
-            return false;
+        if (user.role === 'driver') {
+            const assignedDriverId = String(bus?.assignedDriverId || '');
+            const driverId = String(user.driverId || '');
+
+            if (!assignedDriverId || !driverId || assignedDriverId !== driverId) {
+                socket.emit('location-error', { msg: 'This bus is not assigned to your driver account.' });
+                return false;
+            }
         }
 
         return true;

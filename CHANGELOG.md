@@ -12,6 +12,7 @@
 - Applied npm security fixes; backend and frontend production dependency audits now report zero vulnerabilities.
 - Protected legacy journey mutations and the bulk bus deletion endpoint with role-based authentication.
 - Restricted public registration to passenger accounts after the one-time first-authority bootstrap.
+- Enforced strict driver-to-bus ownership for Socket.IO and REST seat/location management, including unassigned buses.
 
 ## Verification
 

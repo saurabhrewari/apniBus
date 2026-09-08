@@ -15,6 +15,7 @@ Date: 2026-09-08
 - Deployed search API: `Rewari` returned matching route/bus data.
 - Local wrong-driver-password flow: stayed on the login screen and displayed `Invalid Credentials`.
 - Production unauthenticated journey write: returned HTTP 401 after the authorization deployment.
+- Driver ownership guard: code-level review and build verification confirm unassigned buses cannot be managed by driver sessions.
 
 ## Partial Or Data-Dependent
 

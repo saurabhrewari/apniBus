@@ -40,6 +40,18 @@ function normalizeSeatPayload(body) {
     return updates;
 }
 
+function canDriverManageBus(req, bus) {
+    if (req.user?.role !== 'driver') {
+        return true;
+    }
+
+    return Boolean(
+        req.user.driverId &&
+        bus.assignedDriverId &&
+        String(req.user.driverId) === String(bus.assignedDriverId)
+    );
+}
+
 router.post('/', requireAuth(['authority']), async (req, res) => {
     try {
         const {
@@ -147,6 +159,10 @@ router.patch('/:id', requireAuth(['authority', 'driver']), async (req, res) => {
             return sendError(res, 'Bus not found', 404);
         }
 
+        if (!canDriverManageBus(req, bus)) {
+            return sendError(res, 'This bus is not assigned to your driver account', 403);
+        }
+
         Object.assign(bus, updates);
         await bus.save();
 
@@ -180,6 +196,10 @@ router.patch('/:id/seats', requireAuth(['authority', 'driver']), async (req, res
         const bus = await Bus.findById(req.params.id);
         if (!bus) {
             return sendError(res, 'Bus not found', 404);
+        }
+
+        if (!canDriverManageBus(req, bus)) {
+            return sendError(res, 'This bus is not assigned to your driver account', 403);
         }
 
         const totalSeats = Number(req.body.totalSeats ?? bus.totalSeats) || 0;
