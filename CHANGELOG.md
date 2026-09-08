@@ -19,6 +19,7 @@
 - Verified the deployed public/protected API status matrix and recorded it in the QA report.
 - Added auth session restoration through `/api/users/me` and explicit logout controls for authority and driver consoles.
 - Recorded that the session-lifecycle frontend commit still needs a Render-authenticated Manual Deploy; the deployed backend remains healthy.
+- Added responsive browser smoke coverage for mobile, tablet, and desktop passenger layouts.
 
 ## Verification
 
