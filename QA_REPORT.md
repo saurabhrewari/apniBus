@@ -18,6 +18,7 @@ Date: 2026-09-08
 - Driver ownership guard: code-level review and build verification confirm unassigned buses cannot be managed by driver sessions.
 - Local server lifecycle: health passed after restart and the listening port was released after shutdown.
 - JWT tests: malformed signatures and unsupported algorithms are rejected; valid tokens continue to verify.
+- Render manifest: explicit production `NODE_ENV` and deployed `CORS_ORIGINS` are configured.
 
 ## Partial Or Data-Dependent
 
