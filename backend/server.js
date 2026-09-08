@@ -201,6 +201,8 @@ app.get('/api/health', (_req, res) => {
         success: true,
         service: 'apnibus-backend',
         status: 'ok',
+        environment: process.env.NODE_ENV || 'development',
+        version: process.env.RENDER_GIT_COMMIT || process.env.APP_VERSION || 'development',
         mongoState: mongoose.connection.readyState,
         mongoStatus: mongoStates[mongoose.connection.readyState] || 'unknown',
         uptimeSeconds: Math.round(process.uptime()),
