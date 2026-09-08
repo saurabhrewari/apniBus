@@ -18,6 +18,7 @@
 - Made Render production mode and the deployed CORS origin explicit in `render.yaml`.
 - Verified the deployed public/protected API status matrix and recorded it in the QA report.
 - Added auth session restoration through `/api/users/me` and explicit logout controls for authority and driver consoles.
+- Recorded that the session-lifecycle frontend commit still needs a Render-authenticated Manual Deploy; the deployed backend remains healthy.
 
 ## Verification
 

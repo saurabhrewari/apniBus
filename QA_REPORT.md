@@ -21,6 +21,7 @@ Date: 2026-09-08
 - Render manifest: explicit production `NODE_ENV` and deployed `CORS_ORIGINS` are configured.
 - Deployed API matrix: public stops/routes/schedules/buses/search endpoints returned 200; analytics, operations, and `/api/users/me` correctly returned 401 without a session.
 - Auth UX: Authority and Driver now restore valid sessions through `/api/users/me` and provide explicit logout controls; build verification passed. A valid credential session is still required for browser success-path execution.
+- Latest session-lifecycle frontend commit is pushed to GitHub, but Render currently serves the previous frontend asset hash. The Render dashboard redirects to sign-in in this environment, so a user-authenticated Manual Deploy is still required before production UI rollout can be verified.
 
 ## Partial Or Data-Dependent
 
@@ -42,3 +43,4 @@ Date: 2026-09-08
 2. Create or confirm one driver account with matching `driverId` and bus `assignedDriverId`.
 3. Run the authenticated authority CRUD matrix.
 4. Run the driver GPS, stop check-in, seat update, Socket.IO reconnect, and passenger live-update matrix with a real device or mocked GPS.
+5. Sign in to Render and trigger Manual Deploy for the latest `main` commit, then recheck the frontend asset hash.
