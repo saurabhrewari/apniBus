@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-const { requireAuth } = require('../middleware/auth');
+const { optionalAuth, requireAuth } = require('../middleware/auth');
 const { sendError, sendSuccess } = require('../utils/apiResponse');
 const { signToken } = require('../utils/token');
 const { recordAudit } = require('../utils/audit');
@@ -38,7 +38,7 @@ function validatePassword(password) {
     return errors;
 }
 
-router.post('/register', async (req, res) => {
+router.post('/register', optionalAuth, async (req, res) => {
     try {
         const { name, email, password, role = 'passenger', driverId } = req.body;
 
@@ -53,6 +53,20 @@ router.post('/register', async (req, res) => {
 
         if (!['passenger', 'driver', 'authority'].includes(role)) {
             return sendError(res, 'Invalid user role', 400);
+        }
+
+        if (role !== 'passenger') {
+            const hasAuthority = await User.exists({ role: 'authority' });
+            const isFirstAuthority = role === 'authority' && !hasAuthority;
+            const isAuthorizedAuthority = req.user?.role === 'authority';
+
+            if (!isFirstAuthority && !isAuthorizedAuthority) {
+                return sendError(
+                    res,
+                    'Only an authority account can create driver or authority users',
+                    403
+                );
+            }
         }
 
         const existingUser = await User.findOne({ email: String(email).toLowerCase() });

@@ -368,6 +368,12 @@ Body:
 }
 ```
 
+The first authority account can be created without an existing authority token.
+After that bootstrap account exists, only an authenticated authority can create
+additional authority or driver accounts. Public registration remains available
+for passenger accounts, which prevents a public request from granting itself
+fleet-manager access.
+
 Login:
 
 ```http
@@ -386,6 +392,12 @@ Body:
 Login returns a token. The frontend stores it in `localStorage` as `apnibus.authToken` and sends it as a Bearer token on API requests.
 
 Driver login uses the driver email. If the driver enters `DRIVER_001`, the frontend tries `DRIVER_001@apnibus.local`.
+
+For Render, set `CORS_ORIGINS` to the deployed frontend origin, for example
+`https://apnibus-fuao.onrender.com`. Keep `REQUIRE_AUTH=true` and set `JWT_SECRET`
+to a long random value. The legacy journey write endpoints and bulk bus deletion
+endpoint require an authenticated driver or authority; passenger search endpoints
+remain public.
 
 Passwords must be at least 8 characters and include both letters and numbers. After repeated failed login attempts, the account is temporarily locked.
 

@@ -476,7 +476,7 @@ router.get('/buses', async (req, res) => {
 
 
 // DELETE /api/data/buses (NEW FUNCTION to clear data for testing)
-router.delete('/buses', async (req, res) => {
+router.delete('/buses', requireAuth(['authority']), async (req, res) => {
     try {
         await Bus.deleteMany({}); // Deletes all documents in the Bus collection
         res.json({ msg: 'All buses deleted successfully' });

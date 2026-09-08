@@ -10,6 +10,8 @@
 - Added the bus favicon to remove the browser console 404 on `/favicon.ico`.
 - Removed expected login-failure console errors from the driver and authority screens while preserving the visible error message.
 - Applied npm security fixes; backend and frontend production dependency audits now report zero vulnerabilities.
+- Protected legacy journey mutations and the bulk bus deletion endpoint with role-based authentication.
+- Restricted public registration to passenger accounts after the one-time first-authority bootstrap.
 
 ## Verification
 

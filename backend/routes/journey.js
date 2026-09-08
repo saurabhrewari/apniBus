@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Bus = require('../models/Bus');
 const Stop = require('../models/Stop'); // <-- ADD THIS MISSING LINE
+const { requireAuth } = require('../middleware/auth');
 
 function stopQuery(name) {
     return {
@@ -25,7 +26,7 @@ function stopName(stop) {
 // @desc    Start a journey for a bus
 // @route   POST /api/journey/start
 // @desc    Start a journey for a bus (Final Correct Version)
-router.post('/start', async (req, res) => {
+router.post('/start', requireAuth(['authority', 'driver']), async (req, res) => {
     try {
         const { busNumber, busRoute } = req.body;
         if (!busNumber || !busRoute) {
@@ -145,7 +146,7 @@ router.get('/status', async (req, res) => {
 
 // @route   POST /api/journey/end
 // @desc    End a journey for a specific bus
-router.post('/end', async (req, res) => {
+router.post('/end', requireAuth(['authority', 'driver']), async (req, res) => {
     try {
         const { busNumber } = req.body; // Assuming busNumber is sent to end the journey
         const bus = await Bus.findOneAndUpdate(
@@ -166,7 +167,7 @@ router.post('/end', async (req, res) => {
 
 // @route   PATCH /api/journey/seats
 // @desc    Update the number of available seats
-router.patch('/seats', async (req, res) => {
+router.patch('/seats', requireAuth(['authority', 'driver']), async (req, res) => {
     try {
         const { busNumber, seats } = req.body;
         const bus = await Bus.findOneAndUpdate(
