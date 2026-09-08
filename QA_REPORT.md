@@ -16,6 +16,7 @@ Date: 2026-09-08
 - Local wrong-driver-password flow: stayed on the login screen and displayed `Invalid Credentials`.
 - Production unauthenticated journey write: returned HTTP 401 after the authorization deployment.
 - Driver ownership guard: code-level review and build verification confirm unassigned buses cannot be managed by driver sessions.
+- Local server lifecycle: health passed after restart and the listening port was released after shutdown.
 
 ## Partial Or Data-Dependent
 

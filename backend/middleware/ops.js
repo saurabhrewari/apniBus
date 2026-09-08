@@ -16,6 +16,9 @@ function securityHeaders(_req, res, next) {
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('Referrer-Policy', 'same-origin');
     res.setHeader('Permissions-Policy', 'geolocation=(self), camera=(), microphone=()');
+    if (process.env.NODE_ENV === 'production') {
+        res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    }
     next();
 }
 

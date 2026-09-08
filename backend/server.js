@@ -133,6 +133,7 @@ async function recordLocationHistory({ bus, trip, route, routeNumber, driverId, 
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5001;
+app.disable('x-powered-by');
 
 function corsOrigin(origin, callback) {
     if (!origin) {
@@ -241,7 +242,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // ============== OFFLINE DETECTION ==============
 const OFFLINE_WINDOW_MS = Number(process.env.BUS_OFFLINE_AFTER_MS) || 1000 * 60 * 3;
-setInterval(async () => {
+const offlineDetectionTimer = setInterval(async () => {
     try {
         const staleBefore = new Date(Date.now() - OFFLINE_WINDOW_MS);
         const staleBuses = await Bus.find({
@@ -754,4 +755,30 @@ io.on("connection", function (socket) {
 // ============== START THE SERVER ==============
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+});
+
+let isShuttingDown = false;
+async function shutdown(signal) {
+    if (isShuttingDown) {
+        return;
+    }
+
+    isShuttingDown = true;
+    console.log(`${signal} received. Closing ApniBus cleanly...`);
+    clearInterval(offlineDetectionTimer);
+
+    const forceExitTimer = setTimeout(() => process.exit(1), 10000);
+    forceExitTimer.unref();
+
+    await new Promise((resolve) => server.close(resolve));
+    io.close();
+    await mongoose.connection.close(false);
+    clearTimeout(forceExitTimer);
+    process.exit(0);
+}
+
+process.once('SIGTERM', () => shutdown('SIGTERM'));
+process.once('SIGINT', () => shutdown('SIGINT'));
+process.on('unhandledRejection', (error) => {
+    console.error('Unhandled promise rejection:', error);
 });

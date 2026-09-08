@@ -13,6 +13,7 @@
 - Protected legacy journey mutations and the bulk bus deletion endpoint with role-based authentication.
 - Restricted public registration to passenger accounts after the one-time first-authority bootstrap.
 - Enforced strict driver-to-bus ownership for Socket.IO and REST seat/location management, including unassigned buses.
+- Added graceful SIGTERM/SIGINT shutdown, disabled the Express fingerprint header, added production HSTS, and made the frontend default to same-origin API calls in production.
 
 ## Verification
 
