@@ -1,0 +1,38 @@
+# ApniBus QA Report
+
+Date: 2026-09-08
+
+## Verified
+
+- Backend automated tests: 7 passed.
+- Frontend production build: passed with Vite.
+- Backend and frontend dependency audits: 0 vulnerabilities after `npm audit fix`.
+- Local backend health: HTTP 200, MongoDB connected.
+- Deployed health: HTTP 200, MongoDB connected.
+- Deployed gateway: loaded successfully with no browser console errors.
+- Deployed passenger station search: `Rewari Stand` to `Gurgaon Bus Stand` returned 3 buses.
+- Deployed live status: `HR47-1001` opened the vertical route stepper with four stops, schedule fields, seat summary, offline state, and map toggle.
+- Deployed search API: `Rewari` returned matching route/bus data.
+- Local wrong-driver-password flow: stayed on the login screen and displayed `Invalid Credentials`.
+- Production unauthenticated journey write: returned HTTP 401 after the authorization deployment.
+
+## Partial Or Data-Dependent
+
+- Authority dashboard success flow was not completed because the documented sample authority account is not present in the local database. One login attempt correctly rejected the credentials.
+- Driver dashboard success flow, GPS streaming, manual check-in, and realtime seat updates require a valid driver account assigned to a bus and browser GPS permission.
+- Authority CRUD create/update/delete flows require a valid authority session. Destructive delete operations were not run during QA.
+- The production dataset currently contains buses and routes, but the tested search results were offline at test time, so live movement could not be validated with a real active driver.
+
+## Deployment
+
+- URL: https://apnibus-fuao.onrender.com
+- Git commits: `7190daa` and `80ca609`
+- GitHub branch: `main`
+- Render auto-deploy: completed; the new authorization behavior was observed in production.
+
+## Remaining Actions
+
+1. Create or confirm one authority account in MongoDB.
+2. Create or confirm one driver account with matching `driverId` and bus `assignedDriverId`.
+3. Run the authenticated authority CRUD matrix.
+4. Run the driver GPS, stop check-in, seat update, Socket.IO reconnect, and passenger live-update matrix with a real device or mocked GPS.
